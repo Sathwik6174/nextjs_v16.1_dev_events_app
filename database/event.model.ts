@@ -90,9 +90,7 @@ const requiredString = {
 
 const eventSchema = new Schema<EventDocument>(
   {
-    title: { ..
-            
-            .requiredString },
+    title: { ...requiredString },
     slug: {
       type: String,
       required: true,
