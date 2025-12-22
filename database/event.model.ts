@@ -37,12 +37,7 @@ const generateSlug = (title: string): string =>
     .replace(/^-+|-+$/g, '');
 
 /**
- * Normalize a date string to ISO format (YYYY-MM-DD) based on the UTC calendar date.
- * Note: the input is parsed as a full Date/Time and converted to UTC via toISOString(),
- * so values with offsets (e.g. "2024-01-15T23:00:00-05:00") will be normalized to the
- * corresponding UTC date ("2024-01-16" in this example).
- * Callers should supply timestamps that are already in UTC / without timezone offsets
- * if they need to preserve the original local calendar day.
+ * Normalize a date string to ISO format (YYYY-MM-DD).
  * Throws on invalid input so we fail fast.
  */
 const normalizeDate = (value: string): string => {
@@ -95,7 +90,9 @@ const requiredString = {
 
 const eventSchema = new Schema<EventDocument>(
   {
-    title: { ...requiredString },
+    title: { ..
+            
+            .requiredString },
     slug: {
       type: String,
       required: true,
@@ -169,12 +166,12 @@ eventSchema.pre<EventDocument>('save', function (next) {
   }
 
   // Only regenerate the slug if the title changed or slug is missing.
-  if (doc.isModified('title') || !doc.slug) {
+    if (doc.isModified('title') || !doc.slug) {
        const generatedSlug = generateSlug(doc.title);
     if (!generatedSlug) {
-   return next(new Error('Event.title must contain at least one alphanumeric character.'));
-   }
-   doc.slug = generatedSlug;
+       return next(new Error('Event.title must contain at least one alphanumeric character.'));
+    }
+       doc.slug = generatedSlug;
   }
 
   try {
