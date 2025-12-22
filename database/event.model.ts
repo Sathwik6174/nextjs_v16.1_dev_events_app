@@ -115,8 +115,9 @@ const eventSchema = new Schema<EventDocument>(
       type: [String],
       required: true,
       validate: {
-        validator: (value: string[]): boolean => Array.isArray(value) && value.length > 0,
-        message: 'Event.agenda must contain at least one entry.',
+        validator: (value: string[]): boolean =>
+          Array.isArray(value) && value.length > 0 && value.every((item) => item.trim().length > 0),
+        message: 'Event.agenda must contain at least one non-empty entry.',
       },
     },
     organizer: { ...requiredString },
@@ -124,8 +125,9 @@ const eventSchema = new Schema<EventDocument>(
       type: [String],
       required: true,
       validate: {
-        validator: (value: string[]): boolean => Array.isArray(value) && value.length > 0,
-        message: 'Event.tags must contain at least one tag.',
+        validator: (value: string[]): boolean =>
+          Array.isArray(value) && value.length > 0 && value.every((tag) => tag.trim().length > 0),
+        message: 'Event.tags must contain at least one non-empty tag.',
       },
     },
   },
