@@ -165,7 +165,11 @@ eventSchema.pre<EventDocument>('save', function (next) {
 
   // Only regenerate the slug if the title changed or slug is missing.
   if (doc.isModified('title') || !doc.slug) {
-    doc.slug = generateSlug(doc.title);
+       const generatedSlug = generateSlug(doc.title);
+    if (!generatedSlug) {
+   return next(new Error('Event.title must contain at least one alphanumeric character.'));
+   }
+   doc.slug = generatedSlug;
   }
 
   try {
