@@ -6,7 +6,7 @@ import mongoose, { Connection, ConnectOptions, Mongoose } from 'mongoose';
  */
 interface MongooseCache {
   conn: Connection | null;
-  promise: Promise<Mongoose> | null;
+  promise: Promise<Connection> | null;
 }
 
 /**
