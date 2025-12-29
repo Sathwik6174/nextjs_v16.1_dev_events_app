@@ -120,7 +120,7 @@ const EventDetailsPage = async ({params}: { params: Promise<{ slug: string }> })
                 </aside>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+            <div className="flex flex-col-gap-2">
                 <h2>Similar Events</h2>
                 <div className="events">
                     {similarEvents.length > 0 && similarEvents.map((similarEvent: IEvent) => (
