@@ -1,8 +1,19 @@
 import ExploreBtn from "@/components/ExploreBtn";
 import EventCard from "@/components/EventCard";
-import { events } from "@/lib/constants";
+import {IEvent} from "@/database";
+import {cacheLife} from "next/cache";
+// import { events } from "@/lib/constants";
 
-const Page = () => {
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+const Page = async () => {
+
+    'use cache';
+    cacheLife('hours')
+    const response = await fetch(`${BASE_URL}/api/events`);
+    //Now to destructure events from the response of the GET req
+    const {events} = await response.json();
+
     return (
         <div>
             <section>
@@ -16,7 +27,7 @@ const Page = () => {
                     <h3>Featured Events</h3>
 
                     <ol className="events">
-                        {events.map((event) => (
+                        {events && events.length > 0 && events.map((event: IEvent) => (
                             <li key={event.slug}>
                                 <EventCard {...event} />
                             </li>

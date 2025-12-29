@@ -1,18 +1,5 @@
 import {NextRequest, NextResponse} from "next/server";
-import {v2 as cloudinary} from 'cloudinary';
-
-// Configure Cloudinary
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-// Configure Cloudinary
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+import { v2 as cloudinary } from 'cloudinary';
 
 import connectDB from "@/lib/mongodb";
 import Event from '@/database/event.model';
@@ -33,7 +20,7 @@ export async function POST(req: NextRequest) {
 
         const file = formData.get('image') as File;
 
-        if (!file) return NextResponse.json({message: 'Image file is required'}, {status: 400})
+        if(!file) return NextResponse.json({ message: 'Image file is required'}, { status: 400 })
 
         // since both tags and agenda are stored as stringified arrays...we will json.parse() them
         let tags = JSON.parse(formData.get('tags') as string);
@@ -72,11 +59,11 @@ export async function GET() {
     try {
         await connectDB();
 
-        const events = await Event.find().sort({createdAt: -1});
+        const events = await Event.find().sort({ createdAt: -1 });
 
-        return NextResponse.json({message: 'Events fetched successfully', events}, {status: 200});
+        return NextResponse.json({ message: 'Events fetched successfully', events }, { status: 200 });
     } catch (e) {
-        return NextResponse.json({message: 'Event fetching failed', error: e}, {status: 500});
+        return NextResponse.json({ message: 'Event fetching failed', error: e }, { status: 500 });
     }
 }
 
