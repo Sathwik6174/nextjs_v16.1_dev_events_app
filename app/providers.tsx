@@ -1,20 +1,51 @@
+// // app/providers.tsx
+// 'use client'
+//
+// import { usePathname, useSearchParams } from "next/navigation"
+// import { useEffect } from "react"
+// import { usePostHog } from 'posthog-js/react'
+//
+// import posthog from 'posthog-js'
+// import { PostHogProvider as PHProvider } from 'posthog-js/react'
+//
+// export function PostHogProvider({ children }: { children: React.ReactNode }) {
+//     useEffect(() => {
+//         posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
+//             api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
+//             person_profiles: 'identified_only', // or 'always' to create profiles for anonymous users as well
+//             defaults: '2025-11-30'
+//         })
+//     }, [])
+//
+//     return (
+//         <PHProvider client={posthog}>
+//             {children}
+//         </PHProvider>
+//     )
+// }
+
 // app/providers.tsx
 'use client'
 
-import { usePathname, useSearchParams } from "next/navigation"
-import { useEffect } from "react"
-import { usePostHog } from 'posthog-js/react'
-
 import posthog from 'posthog-js'
 import { PostHogProvider as PHProvider } from 'posthog-js/react'
+import { useEffect } from "react"
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
-        posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
-            api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
-            person_profiles: 'identified_only', // or 'always' to create profiles for anonymous users as well
-            defaults: '2025-11-30'
-        })
+        if (typeof window !== 'undefined') {
+            posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
+                api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
+                person_profiles: 'identified_only',
+                capture_pageviews: true,
+                capture_pageleaves: true,
+                loaded: (posthog) => {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('PostHog initialized successfully', posthog)
+                    }
+                }
+            })
+        }
     }, [])
 
     return (
